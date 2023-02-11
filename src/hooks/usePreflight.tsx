@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
-import { SSO } from '../'
-import { fetchWithTimeout } from '../utils/fetchWithTimeout'
+import { SSO } from '../sso-client'
+import { fetchWithTimeout } from '../utils'
 
 type PreflightResponse = {
   success: boolean

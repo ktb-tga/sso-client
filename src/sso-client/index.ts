@@ -11,7 +11,7 @@ type SSOProps = {
   localStorageKey?: string
 }
 
-class SSO {
+class SSOClient {
   #appURL: string
   #apiURL: string
   #authenticateEndpoint = '/api/authenticate/'
@@ -69,18 +69,24 @@ class SSO {
   }
 
   private setupOriginSource(origin: string) {
-    this.#originSourceQuery = origin?.replaceAll('https://', '').replaceAll('http://', '')
+    this.#originSourceQuery = origin
+      ?.replaceAll('https://', '')
+      .replaceAll('http://', '')
   }
 
   private setupSSOModeAndURL(mode: SSOMode) {
     this.#mode = mode
-    this.#ssoURL = mode === 'development' ? 'https://tga-sso-frontend-dev.arge-tga.com' : 'https://sso.tga.gov.tr'
+    this.#ssoURL =
+      mode === 'development'
+        ? 'https://tga-sso-frontend-dev.arge-tga.com'
+        : 'https://sso.tga.gov.tr'
   }
 
   configure(props: SSOProps) {
     this.#appURL = props.appURL || this.#appURL
     this.#apiURL = props.apiURL || this.#apiURL
-    this.#authenticateEndpoint = props.authenticateEndpoint || this.#authenticateEndpoint
+    this.#authenticateEndpoint =
+      props.authenticateEndpoint || this.#authenticateEndpoint
     this.#userInfoEndpoint = props.userInfoEndpoint || this.#userInfoEndpoint
     this.#preflightURL = props.preflightURL || this.#preflightURL
     this.#redirectPath = props.redirectPath || this.#redirectPath
@@ -90,4 +96,4 @@ class SSO {
   }
 }
 
-export default SSO
+export const SSO = new SSOClient()

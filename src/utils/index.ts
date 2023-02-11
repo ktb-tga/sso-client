@@ -2,7 +2,10 @@ type CustomRequest = RequestInit & {
   timeout?: number
 }
 
-export async function fetchWithTimeout(resource: string, options: CustomRequest) {
+export async function fetchWithTimeout(
+  resource: string,
+  options: CustomRequest
+) {
   const { timeout = 25000 } = options
 
   const controller = new AbortController()
