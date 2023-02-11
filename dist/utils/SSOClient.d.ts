@@ -1,5 +1,5 @@
-declare type SSOMode = 'production' | 'development';
-declare type SSOProps = {
+type SSOMode = 'production' | 'development';
+type SSOProps = {
     appURL: string;
     apiURL: string;
     authenticateEndpoint?: string;
