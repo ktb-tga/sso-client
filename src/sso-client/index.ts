@@ -1,7 +1,7 @@
 type SSOMode = 'production' | 'development'
 type SSOProps = {
-  appURL: string
   apiURL: string
+  appURL?: string
   authenticateEndpoint?: string
   userInfoEndpoint?: string
   preflightURL?: string
@@ -12,8 +12,8 @@ type SSOProps = {
 }
 
 class SSOClient {
-  #appURL: string
   #apiURL: string
+  #appURL = window.location.origin // TODO: check for NextJS & server components
   #authenticateEndpoint = '/api/authenticate/'
   #userInfoEndpoint = '/api/user-info/'
   #mode: SSOMode = 'production'
@@ -63,11 +63,6 @@ class SSOClient {
     return this.#redirectPath
   }
 
-  //  TODO: maybe useful?
-  set redirectPath(path: string) {
-    this.#redirectPath = path
-  }
-
   private setupOriginSource(origin: string) {
     this.#originSourceQuery = origin
       ?.replaceAll('https://', '')
@@ -83,8 +78,8 @@ class SSOClient {
   }
 
   configure(props: SSOProps) {
-    this.#appURL = props.appURL || this.#appURL
     this.#apiURL = props.apiURL || this.#apiURL
+    this.#appURL = props.appURL || this.#appURL
     this.#authenticateEndpoint =
       props.authenticateEndpoint || this.#authenticateEndpoint
     this.#userInfoEndpoint = props.userInfoEndpoint || this.#userInfoEndpoint

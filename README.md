@@ -17,7 +17,6 @@ yarn add ktb-tga/sso-client
 
 ```ts
 SSO.configure({
-  appURL: 'https://frontend-app.com',
   apiURL: 'https://backend-api.com'
 })
 ```
@@ -26,8 +25,8 @@ SSO.configure({
 
 | property               |    \*    | default                                     |
 | ---------------------- | :------: | ------------------------------------------- |
-| `appURL`               | required | -                                           |
 | `apiURL`               | required | -                                           |
+| `appURL`               | optional | `window.location.origin`                    |
 | `ssoURL`               |  static  | https://sso.tga.gov.tr                      |
 | `preflightURL`         | optional | https://preflight.tga.gov.tr/api/preflight/ |
 | `authenticateEndpoint` | optional | /api/authenticate/                          |
@@ -45,20 +44,23 @@ import React from 'react'
 import { SSO, usePreflight, useAuth } from 'sso-client'
 
 SSO.configure({
-  appURL: 'http://localhost:3000',
-  apiURL: 'https://mote-backend-dev.arge-tga.com'
+  apiURL: __API_URL__, // xxx-api.tga.gov.tr
+  originSourceQuery:
+    __APP_ENV__ === 'dev' ? 'xxx-frontend-dev.arge-tga.com' : 'xxx.tga.gov.tr',
+  preflightURL: 'https://rapor-api.tga.gov.tr/api/preflight', // temporary usage => sso.tga.gov.tr
+  localStorageKey: 'tga-xxx-token'
 })
 
 type User = {
   id: number
   token: string
   email: string
-  age?: number
 }
 
 const App = () => {
+  const setUser = useAuthStore((state) => state.setUser) // example setUser method
   const { isAllowed, isPreflighting } = usePreflight()
-  const { isAuthed, isAuthing, user } = useAuth<User>(isAllowed)
+  const { isAuthed, isAuthing, user } = useAuth<User>(isAllowed, setUser) // default (true, undefined)
 
   return (
     <div>

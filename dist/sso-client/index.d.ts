@@ -1,7 +1,7 @@
 type SSOMode = 'production' | 'development';
 type SSOProps = {
-    appURL: string;
     apiURL: string;
+    appURL?: string;
     authenticateEndpoint?: string;
     userInfoEndpoint?: string;
     preflightURL?: string;
@@ -22,7 +22,6 @@ declare class SSOClient {
     get localStorageKey(): string;
     get originSourceQuery(): string;
     get redirectPath(): string;
-    set redirectPath(path: string);
     private setupOriginSource;
     private setupSSOModeAndURL;
     configure(props: SSOProps): void;

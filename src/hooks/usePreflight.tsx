@@ -9,16 +9,13 @@ type PreflightResponse = {
 export const usePreflight = () => {
   const [isAllowed, setAllowed] = useState(false)
   const [isPreflighting, setPreflighting] = useState(true)
-  const abortRef = useRef<() => void>(() => {})
+  const abortRef = useRef<AbortController>()
 
   const usePreflight = async () => {
     try {
-      const abortController = new AbortController()
-      const signal = abortController.signal
-      abortRef.current = abortController.abort
-
+      abortRef.current = new AbortController()
       const res = await fetchWithTimeout(SSO.preflightURL, {
-        signal,
+        signal: abortRef.current.signal,
         method: 'GET',
         timeout: 25000
       })
@@ -34,7 +31,7 @@ export const usePreflight = () => {
   useEffect(() => {
     usePreflight()
     return () => {
-      if (SSO.mode === 'production') abortRef.current()
+      if (SSO.mode === 'production') abortRef.current?.abort()
     }
   }, [])
 

@@ -9,13 +9,13 @@ interface UseAuthType<T> {
 }
 
 export const useAuth = <T extends unknown>(
-  allowedNetwork = true
+  allowedNetwork = true,
+  callback?: (user: T) => void
 ): UseAuthType<T> => {
   const [isAuthed, setAuthed] = useState(false)
   const [isAuthing, setAuthing] = useState(false)
   const [user, setUser] = useState<T | null>(null) // user type could be anything depends on app
-
-  const abortRef = useRef<() => void>(() => {})
+  const abortRef = useRef<AbortController>()
   const redirectRef = useRef(SSO.redirectPath)
 
   const authenticate = useCallback(
@@ -29,8 +29,8 @@ export const useAuth = <T extends unknown>(
         }
       )
       const data = await res.json()
-
-      if (!data?.success) return redirectSSO()
+      if (!data?.success)
+        return redirectSSO('autheticate !data?.success on :35')
 
       localStorage.setItem(
         SSO.localStorageKey,
@@ -55,9 +55,9 @@ export const useAuth = <T extends unknown>(
     })
     const data = await res.json()
 
-    if (!data.success) return redirectSSO()
-    setAuthed(true)
+    if (!data?.success) return redirectSSO('userInfo !data.success on :59')
     redirectRef.current = window.location.pathname
+    setAuthed(true)
 
     return data?.data
   }, [])
@@ -67,20 +67,19 @@ export const useAuth = <T extends unknown>(
     const token = JSON.parse(localStorage.getItem(SSO.localStorageKey)!)
     const ssoToken = new URLSearchParams(window.location.search).get('token')
 
-    if (!token && !ssoToken) return redirectSSO()
+    if (!token && !ssoToken)
+      return redirectSSO('handleAuth !token && !ssoToken on :71 ')
 
     try {
-      const abortController = new AbortController()
-      const signal = abortController.signal
-      abortRef.current = abortController.abort
-
+      abortRef.current = new AbortController()
       const data = token
-        ? await userInfo(signal)
-        : await authenticate(ssoToken, signal)
+        ? await userInfo(abortRef.current.signal)
+        : await authenticate(ssoToken, abortRef.current.signal)
       setUser(data)
+      if (callback) callback(data)
     } catch (error) {
       localStorage.removeItem(SSO.localStorageKey)
-      return redirectSSO()
+      return redirectSSO('handleAuth catch error on :82')
     } finally {
       setAuthing(false)
       window.history.pushState({}, document.title, redirectRef.current)
@@ -91,14 +90,15 @@ export const useAuth = <T extends unknown>(
     if (!allowedNetwork) return
     handleAuth()
     return () => {
-      if (SSO.mode === 'production') abortRef.current()
+      if (SSO.mode === 'production') abortRef.current?.abort()
     }
   }, [allowedNetwork])
 
   return { isAuthed, isAuthing, user }
 }
 
-function redirectSSO() {
+function redirectSSO(reason?: string) {
+  if (reason) console.error(reason)
   const { host, hostname } = window.location
   window.open(
     `${SSO.ssoURL}/login?url=${host}${
