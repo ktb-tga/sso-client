@@ -23,6 +23,10 @@ class SSOClient {
   #localStorageKey = 'token'
   #originSourceQuery = ''
 
+  constructor({ apiURL }: Partial<SSOProps> = {}) {
+    this.#apiURL = apiURL || ''
+  }
+
   get appURL() {
     return this.#appURL
   }

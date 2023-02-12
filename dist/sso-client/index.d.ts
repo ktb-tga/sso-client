@@ -12,6 +12,7 @@ type SSOProps = {
 };
 declare class SSOClient {
     #private;
+    constructor({ apiURL }?: Partial<SSOProps>);
     get appURL(): string;
     get apiURL(): string;
     get authenticateEndpoint(): string;
