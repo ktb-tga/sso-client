@@ -1,23 +1,19 @@
 {
   "name": "sso-client",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "TGA SSO Client Package",
   "repository": "ktb-tga/sso-client",
   "private": true,
   "type": "module",
   "source": "src/index.tsx",
-  "exports": {
-    "require": "./dist/index.cjs",
-    "default": "./dist/index.modern.js"
-  },
-  "main": "./dist/index.cjs",
-  "module": "./dist/index.module.js",
-  "unpkg": "./dist/index.umd.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.module.js",
+  "types": "dist/index.d.ts",
   "engines": {
     "node": ">=16"
   },
   "scripts": {
-    "build": "microbundle --no-sourcemap",
+    "build": "microbundle --no-sourcemap --format modern,cjs",
     "start": "microbundle watch --no-compress"
   },
   "peerDependencies": {
