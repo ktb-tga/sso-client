@@ -1,5 +1,5 @@
 type SSOMode = 'production' | 'development'
-type SSOProps = {
+type SSOConfig = {
   apiURL: string
   appURL?: string
   authenticateEndpoint?: string
@@ -23,7 +23,7 @@ class SSOClient {
   #localStorageKey = 'token'
   #originSourceQuery = ''
 
-  constructor({ apiURL }: Partial<SSOProps> = {}) {
+  constructor({ apiURL }: Partial<SSOConfig> = {}) {
     this.#apiURL = apiURL || ''
   }
 
@@ -81,17 +81,17 @@ class SSOClient {
         : 'https://sso.tga.gov.tr'
   }
 
-  configure(props: SSOProps) {
-    this.#apiURL = props.apiURL || this.#apiURL
-    this.#appURL = props.appURL || this.#appURL
+  configure(config: SSOConfig) {
+    this.#apiURL = config.apiURL || this.#apiURL
+    this.#appURL = config.appURL || this.#appURL
     this.#authenticateEndpoint =
-      props.authenticateEndpoint || this.#authenticateEndpoint
-    this.#userInfoEndpoint = props.userInfoEndpoint || this.#userInfoEndpoint
-    this.#preflightURL = props.preflightURL || this.#preflightURL
-    this.#redirectPath = props.redirectPath || this.#redirectPath
-    this.#localStorageKey = props.localStorageKey || this.#localStorageKey
-    this.setupOriginSource(props.originSourceQuery || this.#originSourceQuery)
-    this.setupSSOModeAndURL(props.mode || this.#mode)
+      config.authenticateEndpoint || this.#authenticateEndpoint
+    this.#userInfoEndpoint = config.userInfoEndpoint || this.#userInfoEndpoint
+    this.#preflightURL = config.preflightURL || this.#preflightURL
+    this.#redirectPath = config.redirectPath || this.#redirectPath
+    this.#localStorageKey = config.localStorageKey || this.#localStorageKey
+    this.setupOriginSource(config.originSourceQuery || this.#originSourceQuery)
+    this.setupSSOModeAndURL(config.mode || this.#mode)
   }
 }
 

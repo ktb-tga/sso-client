@@ -1,5 +1,5 @@
 type SSOMode = 'production' | 'development';
-type SSOProps = {
+type SSOConfig = {
     apiURL: string;
     appURL?: string;
     authenticateEndpoint?: string;
@@ -12,7 +12,7 @@ type SSOProps = {
 };
 declare class SSOClient {
     #private;
-    constructor({ apiURL }?: Partial<SSOProps>);
+    constructor({ apiURL }?: Partial<SSOConfig>);
     get appURL(): string;
     get apiURL(): string;
     get authenticateEndpoint(): string;
@@ -25,7 +25,7 @@ declare class SSOClient {
     get redirectPath(): string;
     private setupOriginSource;
     private setupSSOModeAndURL;
-    configure(props: SSOProps): void;
+    configure(config: SSOConfig): void;
 }
 export declare const SSO: SSOClient;
 export {};
