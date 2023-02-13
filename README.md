@@ -41,7 +41,7 @@ SSO.configure({
 ```tsx
 import React from 'react'
 
-import { SSO, usePreflight, useAuth } from 'sso-client'
+import { SSO, usePreflight, useAuth } from '@ktb-tga/sso-client'
 
 SSO.configure({
   apiURL: __API_URL__, // xxx-api.tga.gov.tr
