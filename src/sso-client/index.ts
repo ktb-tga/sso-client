@@ -18,7 +18,7 @@ class SSOClient {
   #userInfoEndpoint = '/api/user-info/'
   #mode: SSOMode = 'production'
   #ssoURL = 'https://sso.tga.gov.tr'
-  #preflightURL = 'https://preflight.tga.gov.tr/api/preflight/'
+  #preflightURL = 'https://preflight.tga.gov.tr'
   #redirectPath = '/'
   #localStorageKey = 'token'
   #originSourceQuery = ''
