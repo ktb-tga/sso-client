@@ -1,6 +1,6 @@
 {
   "name": "@ktb-tga/sso-client",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "description": "TGA SSO Client Package",
   "repository": "ktb-tga/sso-client",
   "private": true,
