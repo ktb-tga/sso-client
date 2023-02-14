@@ -9,6 +9,7 @@ type SSOConfig = {
   originSourceQuery?: string
   redirectPath?: string
   localStorageKey?: string
+  bearerTokenKey?: string
 }
 
 class SSOClient {
@@ -21,6 +22,7 @@ class SSOClient {
   #preflightURL = 'https://preflight.tga.gov.tr'
   #redirectPath = '/'
   #localStorageKey = 'token'
+  #bearerTokenKey = 'Bearer'
   #originSourceQuery = ''
 
   constructor({ apiURL }: Partial<SSOConfig> = {}) {
@@ -59,6 +61,10 @@ class SSOClient {
     return this.#localStorageKey
   }
 
+  get bearerTokenKey() {
+    return this.#bearerTokenKey
+  }
+
   get originSourceQuery() {
     return this.#originSourceQuery
   }
@@ -81,6 +87,21 @@ class SSOClient {
         : 'https://sso.tga.gov.tr'
   }
 
+  redirectSSO(reason?: string, callback?: () => void, bypass = false) {
+    if (bypass) return
+    if (reason) console.error(reason)
+    localStorage.removeItem(this.#localStorageKey)
+
+    const { host, hostname } = window.location
+    window.open(
+      `${SSO.ssoURL}/login?url=${host}${
+        hostname === 'localhost' ? `&origin=${SSO.originSourceQuery}` : ''
+      }`,
+      '_self'
+    )
+    if (callback) callback()
+  }
+
   configure(config: SSOConfig) {
     this.#apiURL = config.apiURL || this.#apiURL
     this.#appURL = config.appURL || this.#appURL
@@ -90,6 +111,7 @@ class SSOClient {
     this.#preflightURL = config.preflightURL || this.#preflightURL
     this.#redirectPath = config.redirectPath || this.#redirectPath
     this.#localStorageKey = config.localStorageKey || this.#localStorageKey
+    this.#bearerTokenKey = config.bearerTokenKey || this.#bearerTokenKey
     this.setupOriginSource(config.originSourceQuery || this.#originSourceQuery)
     this.setupSSOModeAndURL(config.mode || this.#mode)
   }
