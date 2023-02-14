@@ -48,7 +48,7 @@ export const useAuth = <T extends unknown>(
       signal,
       method: 'GET',
       headers: {
-        Authorization: `Token ${JSON.parse(
+        Authorization: `${SSO.bearerTokenKey} ${JSON.parse(
           localStorage.getItem(SSO.localStorageKey)!
         )}`
       }
