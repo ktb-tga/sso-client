@@ -4,6 +4,7 @@
   "description": "TGA SSO Client Package",
   "repository": "ktb-tga/sso-client",
   "private": true,
+  "license": "UNLICENSED",
   "type": "module",
   "source": "src/index.tsx",
   "main": "./dist/index.cjs",
