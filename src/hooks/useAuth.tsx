@@ -10,7 +10,8 @@ interface UseAuthType<T> {
 
 export const useAuth = <T extends unknown>(
   allowedNetwork = true,
-  callback?: (user: T) => void
+  callback?: (user: T) => void,
+  bypass = false
 ): UseAuthType<T> => {
   const [isAuthed, setAuthed] = useState(false)
   const [isAuthing, setAuthing] = useState(false)
@@ -30,7 +31,11 @@ export const useAuth = <T extends unknown>(
       )
       const data = await res.json()
       if (!data?.success)
-        return SSO.redirectSSO('autheticate !data?.success on :35')
+        return SSO.redirectSSO(
+          'autheticate !data?.success on :35',
+          undefined,
+          bypass
+        )
 
       localStorage.setItem(
         SSO.localStorageKey,
@@ -55,7 +60,8 @@ export const useAuth = <T extends unknown>(
     })
     const data = await res.json()
 
-    if (!data?.success) return SSO.redirectSSO('userInfo !data.success on :59')
+    if (!data?.success)
+      return SSO.redirectSSO('userInfo !data.success on :59', undefined, bypass)
     redirectRef.current = window.location.pathname
     setAuthed(true)
 
@@ -68,7 +74,11 @@ export const useAuth = <T extends unknown>(
     const ssoToken = new URLSearchParams(window.location.search).get('token')
 
     if (!token && !ssoToken)
-      return SSO.redirectSSO('handleAuth !token && !ssoToken on :71 ')
+      return SSO.redirectSSO(
+        'handleAuth !token && !ssoToken on :71',
+        undefined,
+        bypass
+      )
 
     try {
       abortRef.current = new AbortController()
@@ -79,7 +89,7 @@ export const useAuth = <T extends unknown>(
       if (callback) callback(data)
     } catch (error) {
       localStorage.removeItem(SSO.localStorageKey)
-      return SSO.redirectSSO('handleAuth catch error on :82')
+      return SSO.redirectSSO('handleAuth catch error on :82', undefined, bypass)
     } finally {
       setAuthing(false)
       window.history.pushState({}, document.title, redirectRef.current)
