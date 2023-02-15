@@ -30,7 +30,7 @@ export const useAuth = <T extends unknown>(
       )
       const data = await res.json()
       if (!data?.success)
-        return redirectSSO('autheticate !data?.success on :35')
+        return SSO.redirectSSO('autheticate !data?.success on :35')
 
       localStorage.setItem(
         SSO.localStorageKey,
@@ -48,14 +48,14 @@ export const useAuth = <T extends unknown>(
       signal,
       method: 'GET',
       headers: {
-        Authorization: `Token ${JSON.parse(
+        Authorization: `${SSO.bearerTokenKey} ${JSON.parse(
           localStorage.getItem(SSO.localStorageKey)!
         )}`
       }
     })
     const data = await res.json()
 
-    if (!data?.success) return redirectSSO('userInfo !data.success on :59')
+    if (!data?.success) return SSO.redirectSSO('userInfo !data.success on :59')
     redirectRef.current = window.location.pathname
     setAuthed(true)
 
@@ -68,7 +68,7 @@ export const useAuth = <T extends unknown>(
     const ssoToken = new URLSearchParams(window.location.search).get('token')
 
     if (!token && !ssoToken)
-      return redirectSSO('handleAuth !token && !ssoToken on :71 ')
+      return SSO.redirectSSO('handleAuth !token && !ssoToken on :71 ')
 
     try {
       abortRef.current = new AbortController()
@@ -79,7 +79,7 @@ export const useAuth = <T extends unknown>(
       if (callback) callback(data)
     } catch (error) {
       localStorage.removeItem(SSO.localStorageKey)
-      return redirectSSO('handleAuth catch error on :82')
+      return SSO.redirectSSO('handleAuth catch error on :82')
     } finally {
       setAuthing(false)
       window.history.pushState({}, document.title, redirectRef.current)
@@ -95,15 +95,4 @@ export const useAuth = <T extends unknown>(
   }, [allowedNetwork])
 
   return { isAuthed, isAuthing, user }
-}
-
-function redirectSSO(reason?: string) {
-  if (reason) console.error(reason)
-  const { host, hostname } = window.location
-  window.open(
-    `${SSO.ssoURL}/login?url=${host}${
-      hostname === 'localhost' ? `&origin=${SSO.originSourceQuery}` : ''
-    }`,
-    '_self'
-  )
 }

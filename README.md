@@ -21,6 +21,10 @@ SSO.configure({
 })
 ```
 
+```ts
+SSO.redirectSSO(reason?:string, callback?: () => void, bypass = false)
+```
+
 `configure` method accepts properties in the table below.
 
 | property               |    \*    | default                                     |
@@ -35,6 +39,7 @@ SSO.configure({
 | `redirectPath`         | optional | /                                           |
 | `originSourceQuery`    | optional | -                                           |
 | `localStorageKey`      | optional | token                                       |
+| `bearerTokenKey`       | optional | Bearer                                      |
 
 ## Example
 

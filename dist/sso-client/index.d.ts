@@ -9,6 +9,7 @@ type SSOConfig = {
     originSourceQuery?: string;
     redirectPath?: string;
     localStorageKey?: string;
+    bearerTokenKey?: string;
 };
 declare class SSOClient {
     #private;
@@ -21,10 +22,12 @@ declare class SSOClient {
     get ssoURL(): string;
     get mode(): SSOMode;
     get localStorageKey(): string;
+    get bearerTokenKey(): string;
     get originSourceQuery(): string;
     get redirectPath(): string;
     private setupOriginSource;
     private setupSSOModeAndURL;
+    redirectSSO(reason?: string, callback?: () => void, bypass?: boolean): void;
     configure(config: SSOConfig): void;
 }
 export declare const SSO: SSOClient;
