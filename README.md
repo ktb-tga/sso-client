@@ -27,19 +27,19 @@ SSO.redirectSSO(reason?:string, callback?: () => void, bypass = false)
 
 `configure` method accepts properties in the table below.
 
-| property               |    \*    | default                                     |
-| ---------------------- | :------: | ------------------------------------------- |
-| `apiURL`               | required | -                                           |
-| `appURL`               | optional | `window.location.origin`                    |
-| `ssoURL`               |  static  | https://sso.tga.gov.tr                      |
-| `preflightURL`         | optional | https://preflight.tga.gov.tr/api/preflight/ |
-| `authenticateEndpoint` | optional | /api/authenticate/                          |
-| `userInfoEndpoint`     | optional | /api/user-info/                             |
-| `mode`                 | optional | production                                  |
-| `redirectPath`         | optional | /                                           |
-| `originSourceQuery`    | optional | -                                           |
-| `localStorageKey`      | optional | token                                       |
-| `bearerTokenKey`       | optional | Bearer                                      |
+| property               |    \*    | default                      |
+| ---------------------- | :------: | ---------------------------- |
+| `apiURL`               | required | -                            |
+| `appURL`               | optional | `window.location.origin`     |
+| `ssoURL`               |  static  | https://sso.tga.gov.tr       |
+| `preflightURL`         | optional | https://preflight.tga.gov.tr |
+| `authenticateEndpoint` | optional | /api/authenticate/           |
+| `userInfoEndpoint`     | optional | /api/user-info/              |
+| `mode`                 | optional | production                   |
+| `redirectPath`         | optional | /                            |
+| `originSourceQuery`    | optional | -                            |
+| `localStorageKey`      | optional | token                        |
+| `bearerTokenKey`       | optional | Bearer                       |
 
 ## Example
 
@@ -52,7 +52,6 @@ SSO.configure({
   apiURL: __API_URL__, // xxx-api.tga.gov.tr
   originSourceQuery:
     __APP_ENV__ === 'dev' ? 'xxx-frontend-dev.arge-tga.com' : 'xxx.tga.gov.tr',
-  preflightURL: 'https://rapor-api.tga.gov.tr/api/preflight', // temporary usage => sso.tga.gov.tr
   localStorageKey: 'tga-xxx-token'
 })
 
