@@ -12,6 +12,7 @@ export async function fetchWithTimeout(
   const id = setTimeout(() => controller.abort(), timeout)
   const response = await fetch(resource, {
     ...options,
+    mode: 'cors',
     signal: controller.signal,
     headers: { 'Content-Type': 'application/json', ...options.headers }
   })
