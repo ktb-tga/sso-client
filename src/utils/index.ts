@@ -13,8 +13,7 @@ export async function fetchWithTimeout(
   const response = await fetch(resource, {
     ...options,
     mode: 'cors',
-    signal: controller.signal,
-    headers: { 'Content-Type': 'application/json', ...options.headers }
+    signal: controller.signal
   })
 
   clearTimeout(id)
