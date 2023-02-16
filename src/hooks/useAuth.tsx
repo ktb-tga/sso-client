@@ -26,7 +26,8 @@ export const useAuth = <T extends unknown>(
         {
           signal,
           method: 'POST',
-          body: JSON.stringify({ token: ssoToken })
+          body: JSON.stringify({ token: ssoToken }),
+          headers: { 'Content-Type': 'application/json' }
         }
       )
       const data = await res.json()
@@ -53,6 +54,7 @@ export const useAuth = <T extends unknown>(
       signal,
       method: 'GET',
       headers: {
+        'Content-Type': 'application/json',
         Authorization: `${SSO.bearerTokenKey} ${JSON.parse(
           localStorage.getItem(SSO.localStorageKey)!
         )}`
